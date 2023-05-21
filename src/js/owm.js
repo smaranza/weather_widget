@@ -78,29 +78,27 @@ const OWMAPI = {
             return ((a.dt_txt < b.dt_txt) ? -1 : ((a.dt_txt > b.dt_txt) ? 1 : 0));
         });
         
+        response.list.forEach(timestamp => {
+            let date = new Date(timestamp.dt_txt);
+            timestamp.date = date.toDateString();
+            timestamp.day = SNIPPETS.weekdays[date.getDay()];
+            timestamp.time = date.getHours();
+            timestamp.weather = timestamp['weather'][0];
+            timestamp.weather.iconSrc = this.getIconByWeather(timestamp.weather.icon);
+
+        });
+        
         // slice forecast list into days
         for (let i = 0; i < response.list.length; i++) {
+            let ts = response.list[i];
+            
             // skip today's forecast
             let today = new Date(Date.now()).toDateString();
-            let itemDate = new Date(response.list[i].dt_txt).toDateString();
-
-            if (today == itemDate) {
-                continue
-            }
-            
-            // 40 timestamps (8 * 5 days = every 3h )
-            dailyForecast.push(response.list.splice(i, 7));
-        }
-
-        for (let i = 0; i < dailyForecast.length; i++) {
-            const day = dailyForecast[i];
-            for (const hour of day) {
-                let timestamp = new Date(hour.dt_txt);
-                hour.date = timestamp.toDateString();
-                hour.day = SNIPPETS.weekdays[timestamp.getDay()];
-                hour.time = timestamp.getHours();
-                hour.weather = hour['weather'][0];
-                hour.weather.iconSrc = this.getIconByWeather(hour.weather.icon);
+            if (today == ts.date) {
+                response.list.pop(ts)
+            } else {
+                // 40 timestamps (8 * 5 days = every 3h )
+                dailyForecast.push(response.list.splice(i, 7));
             }
         }
 

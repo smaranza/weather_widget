@@ -1,0 +1,46 @@
+.next,
+.prev {
+
+}
+
+.slider {
+    display: block;
+    position: relative;
+    overflow: hidden;
+
+    .slider__track {
+        position: relative;
+        display: flex;
+        flex-flow: row;
+        transition: transform 300ms ease-in-out;
+        
+        .slider__slide {
+            width: 100%;
+            display: block;
+            position: relative;
+            flex-shrink: 0;
+            border: 1px solid red;
+        }
+    }
+
+    .slider__pagination {}
+    
+    .slider__navigation {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+
+        .next,
+        .prev {
+            &::after {
+                content: ">";
+                position: relative;
+                display: block;
+                width: 30px;
+                aspect-ratio: 1/1;
+                z-index: 300;
+            }
+        }
+    }
+
+}
