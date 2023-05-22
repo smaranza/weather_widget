@@ -20,9 +20,8 @@ for (const cityName of citiesName) {
 $(function () {
     const app = $(weatherSlider);
 
+    // CREATE CITY TEMPLATE
     if (citiesData) {
-
-        // CREATE CITY TEMPLATE
         for (let i = 0; i < citiesData.length; i++) {
             const city = citiesData[i];
 
@@ -41,14 +40,17 @@ $(function () {
             ]);
 
             // append city forecast weather section
-            // $($cityForecast).append(
-            //     $(TEMPLATE.forecastList(city.forecast))
-            // );
+            $($cityForecast).append(
+                $(TEMPLATE.forecastList(city.forecast))
+            );
         }
     }
-
-    const carousel = new SLIDER;
-
+    
+    // INIT SLIDER
+    const carousel = new SLIDER({
+        infinite: true,
+        slideCls: 'weather-city'
+    });
 });
 
 

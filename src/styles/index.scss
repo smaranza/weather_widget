@@ -33,11 +33,11 @@ body {
 
   main {
     width: 100%;
+    height: 100vh;
 
     #weather-slider {
       background-color: blue;
-      
-
+      height: 100%;
 
       .city__forecast {
         &-inner {
