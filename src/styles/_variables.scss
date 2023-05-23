@@ -1,5 +1,84 @@
-$font-size: 1rem;
-$font-family: 'Arial', sans-serif;
-$background-color: #121212;
-$font-color: #dae0e0;
-$page-width: 650px;
+@mixin neumorph {
+    // border-radius: 1.2rem;s
+    $background-color: #e0e0e0;
+    box-shadow: -20px -20px 60px #bebebe,
+                20px 20px 60px #ffffff;
+}
+
+
+/* --------- LAYOUT --------- */
+
+$breakpoint__mobile: 768px;
+$breakpoint__mobile-ex: $breakpoint__mobile - 1px;
+
+$gap: 1.2rem;
+
+$gap__xs: calc($gap / 2); // 10px
+$gap__s:  $gap;           // 20px
+$gap__m:  $gap * 1.25;    // 25px
+$gap__l:  $gap * 2;       // 40px
+$gap__xl: $gap * 3.25;    // 65px
+
+
+/* --------- TYPOGRAPHY --------- */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+$f-family: 'DM Sans', sans-serif;
+
+$f-weight__regular: 400;
+$f-weight__bold: 700;
+
+$f-size: 1rem; // 16px
+
+$f-size__xs:  $f-size * 0.875; // 14px 
+$f-size__s:   $f-size; 
+$f-size__m:   $f-size * 1.25; // 20px
+$f-size__l:   $f-size * 1.5; // 24px
+$f-size__xl:  $f-size * 2.125; // 34px
+$f-size__xxl: $f-size * 3.75; // 60px
+
+/* ----------- COLORS ----------- */
+
+$white: #ffffff;
+$lighter: #e0e0e0;
+$light: #bebebe;
+$dark: #2d2d2d;
+$black: #000000;
+$teal: #13334b;
+
+$colors: (
+    "white": $white,
+    "lighter": $lighter,
+    "light": $light,
+    "dark": $dark,
+    "black": $black,
+    "teal": $teal,
+);
+
+/* --------- TRANSITION --------- */
+
+// TIME 
+$t__base: 300ms;
+
+$t__faster: calc($t__base / 3.33);
+$t__fast:   calc($t__base / 2.5);
+$t__base:   $t__base;
+$t__slow:   $t__base * 1.75;
+$t__slower: $t__base * 3;
+
+$t__bounce: cubic-bezier(.29,1.52,.65,.84);
+
+/* --------- PSEUDO --------- */
+
+@mixin pseudo($position: absolute) {
+    content: '';
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    position: $position;
+    top: 0;
+    left: 0;
+    z-index: 30;
+}
+
+$background-color: $dark;
+$font-color: $lighter;

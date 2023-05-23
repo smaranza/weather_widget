@@ -9,8 +9,8 @@
 }
 
 html {
-  font-size: $font-size;
-  font-family: $font-family;
+  font-size: $f-size;
+  font-family: $f-family;
   background: $background-color;
   color: $font-color;
   line-height: 1.4;
@@ -26,28 +26,61 @@ body {
   margin: 0;
   padding: 0;
   text-align: center;
-  max-width: $page-width;
   width: 100%;
-  min-height: 100vh; 
-  overflow-x: hidden;
+
+  &.no__scroll {
+    overflow: hidden;
+  }
 
   main {
     width: 100%;
     height: 100vh;
+    // padding: 1rem;
 
     #weather-slider {
-      background-color: blue;
+      // background-color: blue;
       height: 100%;
+      @include neumorph;
+      
+      
+      .weather-city {
+        position: relative;
+        padding: 3em;
 
-      .city__forecast {
-        &-inner {
-          display: inline-flex;
+      
+        .city__bg {
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          left: 0;
+          top: 0;
+          z-index: -1;
+          background-size: cover;
+          // filter: blur(2px);
+          filter: contrast(.8);
+          
+          &::before {
+            @include pseudo;
+            // backdrop-filter: blur(8px);
+            background-color: rgba(19, 51, 75, 0.638);
+          }
+        }
+        
+        .city__forecast {
+          &-inner {
+            display: inline-flex;
+  
+            .forecast__day {
+              // max-width: 20%;
+              img {
+                width: 100%;
+              }
 
-          .forecast__day {
-            // max-width: 20%;
+            }
           }
         }
       }
+
     }
   }
 }

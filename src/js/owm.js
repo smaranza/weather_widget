@@ -14,7 +14,7 @@ const OWMAPI = {
     client: axios.create({
         baseURL: 'https://api.openweathermap.org',
         params: {
-            appid: process.env.API_KEY,
+            appid: process.env.OWM_KEY,
         }
     }),
 

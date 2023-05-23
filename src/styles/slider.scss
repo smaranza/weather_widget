@@ -1,92 +1,110 @@
-.next,
-.prev {
+@mixin slider($light, $color, $dark) {
 
-}
-
-.slider {
-    display: block;
-    position: relative;
-    overflow: hidden;
-
-    .slider__track {
+    .slider {
+        display: block;
         position: relative;
-        display: flex;
-        flex-flow: row;
-        transition: transform 300ms ease-in-out;
-        height: 100%;
-        
-        .slider__slide {
-            width: 100%;
-            display: block;
+        overflow: hidden;
+        width: 100%;
+    
+        .slider__track {
             position: relative;
-            flex-shrink: 0;
-            border: 1px solid red;
-        }
-    }
-
-    .slider__pagination {
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-
-        .dot__list {
             display: flex;
             flex-flow: row;
-            
-            .dot__item {
-                cursor: pointer;
-                padding: 1rem .5rem;
-                transition: background-color 120ms;
-                
-                &::after {
-                    content: '';
-                    display: block;
-                    position: relative;
-                    width: 8px;
-                    aspect-ratio: 1 / 1;
-                    border-radius: 50%;
-                    background-color: transparent;
-                    border: 1px solid white;
-                }
+            transition: transform 300ms ease;
+            height: 100%;
+            width: max-content;
+            cursor: grab;
     
-                &.is__active {
+            &.is__dragging {
+                cursor: grabbing;
+                transition-duration: 90ms;
+            }
+            
+            .slider__slide {
+                width: 100vw;
+                display: block;
+                position: relative;
+                flex-shrink: 0;
+            }
+        }
+        
+        .slider__pagination {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            
+            .dot__list {
+                display: flex;
+                flex-flow: row;
+                
+                .dot__item {
+                    cursor: pointer;
+                    padding: 1rem .25rem;
+                    transition: background-color 120ms;
+                    
                     &::after {
-                        background-color: white;
+                        @include pseudo('relative');
+                        height: auto;
+                        width: 8px;
+                        aspect-ratio: 1 / 1;
+                        border-radius: 50%;
+                        background-color: transparent;
+                        border: 1px solid white;
+                    }
+                    
+                    &.is__active {
+                        &::after {
+                            background-color: white;
+                        }
+                    }
+                }
+            }
+        }
+        
+        .slider__navigation {
+            display: none;
+
+            @media (min-width: $breakpoint__mobile) {
+                display: block;
+                width: 100%;
+                
+                .next,
+                .prev {
+                    cursor: pointer;
+                    position: absolute;
+                    height: calc(100% - 12px);
+                    margin-top: 6px;
+                    width: 80px;
+                    top: 0;
+                    left: 0;
+                    transition: 120ms ease;
+                    box-shadow: inset -20px 0 8px 12px $light;
+                    transition-property: background-color;
+                    mix-blend-mode: overlay;
+    
+                    transition-property: background-color;
+                    mix-blend-mode: darken;
+    
+                    &:hover {
+                        background: linear-gradient(-90deg, rgba(#bebebe, 0) 0%, rgba(#bebebe, .7 ) 100%);
+                        box-shadow: inset 12px 0 8px 6px #e0e0e0;
+                    }
+                }
+                
+                .next {
+                    left: unset;
+                    right: 0;
+    
+                    &:hover {
+                        background: linear-gradient(90deg, rgba(#bebebe, 0) 0%, rgba(#bebebe, .7 ) 100%);
+                        box-shadow: inset -12px 0 8px 6px #e0e0e0;
                     }
                 }
             }
         }
     }
-
-    .slider__navigation {
-        width: 100%;
-        
-        .next,
-        .prev {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-
-            &::after {
-                content: ">";
-                position: relative;
-                display: block;
-                width: 30px;
-                aspect-ratio: 1/1;
-                z-index: 300;
-            }
-        }
-        
-        .next {
-            right: 0;
-        }
-        .prev {
-            left: 0;
-            &::after {
-                content: "<";
-            }
-        }
-    }
-
 }
+
+@include slider(#e0e0e0, #bebebe, #2d2d2d);

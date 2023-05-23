@@ -1,7 +1,9 @@
-// Import Weather API
+// Import Modules
+import axios from "axios";
 import OWM from '@/js/owm'
 import TEMPLATE from '@/js/template'
 import SLIDER from '@/js/slider'
+import SNIPPETS from "@/js/snippets";
 
 // Import of styles
 import '@/styles/index.scss'
@@ -12,9 +14,33 @@ const citiesName = weatherSlider.dataset.cities.split(", ")
 
 let citiesData = [];
 
+// create axios instance with reusable options
+const PexelsClient =  axios.create({
+    baseURL: 'https://api.pexels.com/v1/',
+    headers: {
+        Authorization: process.env.PEXELS_KEY,
+    }
+});
+
+async function searchPexelImage(query) {
+    let response = await PexelsClient.get("search", {
+        params: {
+            query: query,
+            orientation: 'landscape',
+            per_page: 1
+        }
+    }).catch((error) => {
+        console.log(error);
+    })
+
+    return response.data.photos[0]
+}
+
 // FETCH WEATHER DATA
 for (const cityName of citiesName) {
-    citiesData.push(await OWM.getCityWeather(cityName));
+    let cityData = await OWM.getCityWeather(cityName);
+    cityData.background = await searchPexelImage(cityData.name);
+    citiesData.push(cityData);
 }
 
 $(function () {
@@ -26,11 +52,21 @@ $(function () {
             const city = citiesData[i];
 
             // create city base template
-            let $cityBase = $(TEMPLATE.baseCityEl).appendTo(app);
-            $($cityBase).appendTo(app);
+            let $city = $(TEMPLATE.baseCityEl).appendTo(app);
+            $($city).appendTo(app);
 
-            let $cityCurrent = $($cityBase).find('.city__current');
-            let $cityForecast = $($cityBase).find('.city__forecast');
+            // city background
+            let cityBG = city.background.src[window.innerWidth < 768 ? "portrait" : "landscape"];
+            
+            $($city).append($('<div>', {
+                class: "city__bg",
+                css : {
+                    backgroundImage: `url(${cityBG})`
+                }
+            }));
+
+            let $cityCurrent = $($city).find('.city__current');
+            let $cityForecast = $($city).find('.city__forecast');
 
             // append city current weather section
             $($cityCurrent).append([
@@ -52,7 +88,6 @@ $(function () {
         slideCls: 'weather-city'
     });
 });
-
 
 
 // REGISTER EVENTS

@@ -7,5 +7,12 @@
         "4": "thursday",
         "5": "friday",
         "6": "saturday"
+    },
+    "banners": {
+        "london": "https://images.pexels.com/photos/14296821/pexels-photo-14296821.jpeg",
+        "milan": "https://images.pexels.com/photos/14296821/pexels-photo-14296821.jpeg", 
+        "bangkok": "https://images.pexels.com/photos/14296821/pexels-photo-14296821.jpeg", 
+        "los_angeles": "https://images.pexels.com/photos/14296821/pexels-photo-14296821.jpeg" , 
+        "nairobi": "https://images.pexels.com/photos/14296821/pexels-photo-14296821.jpeg"
     }
 }

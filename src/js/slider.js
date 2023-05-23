@@ -1,20 +1,22 @@
 class SLIDER {
     constructor(custom) {
         let defaults = {
-            threshold: 100,
+            threshold: 20,
             initialSlide: 0,
             infinite: false,
             fixedWidth: true,
             draggingCls: "is__dragging",
             activeCls: "is__active",
             slideCls: "slide",
-            transitionMs: 300,
+            noScrollCls: "no__scroll",
+            transitionMs: 0,
         }
 
         this.dragStart;
         this.dragEnd;
         this.dragDelta = 0;
         this.opts = { ...defaults, ...custom };
+        this.threshold = window.innerWidth / 100 * this.opts.threshold;
         this.currentSlide = this.opts.initialSlide;
         this.init()
     }
@@ -87,7 +89,7 @@ class SLIDER {
         });
 
         this.$dotItems = this.$dotList.children();
-        this.$slider.append($pagination)
+        this.$slider.prepend($pagination)
     }
 
     /**
@@ -113,7 +115,7 @@ class SLIDER {
 
         // resize
         $(window).on('resize', () => {
-            this.slideWidth = $($($slides)[0]).outerWidth();
+            this.slideWidth = $($(me.$slides)[0]).outerWidth();
             me.handleSlide(0);
         });
     }
@@ -143,6 +145,9 @@ class SLIDER {
 
             let pointerA = pointers[0];
             this.dragStart = pointerA.clientX;
+
+            // prevent vertical scroll when sliding
+            $('body').addClass(this.opts.noScrollCls);
 
             $(this.$track).on('touchmove mousemove', this.onTouchMove.bind(this));
             $(this.$track).on('touchend mouseup', this.onTouchEnd.bind(this));
@@ -180,11 +185,13 @@ class SLIDER {
         $(this.$track).off('touchmove mousemove');
 
         if (Math.floor(this.dragDelta) == 0) {
+
+            $('body').removeClass(this.opts.noScrollCls);
             $(this.$track).removeClass(this.opts.draggingCls)
             return
         }
 
-        let direction = (Math.abs(this.dragDelta) < this.opts.threshold)
+        let direction = (Math.abs(this.dragDelta) < this.threshold)
             ? 0
             : (this.dragDelta > 0)
                 ? -1
@@ -215,6 +222,8 @@ class SLIDER {
      * @param (int) slide(index)
      */
     slideTo(slide) {
+        $(this.$track).removeClass(this.opts.draggingCls)
+
         $(this.$track)
             .css('transform', `translateX( ${(slide * this.slideWidth)}px)`);
 
@@ -225,9 +234,8 @@ class SLIDER {
         this.dragStart = this.dragEnd = this.dragDelta = 0;
 
         // remove dragging class at transition end
-        setTimeout(() => {
-            $(this.$track).removeClass(this.opts.draggingCls)
-        }, this.opts.transitionMs);
+        // setTimeout(() => {
+        // }, this.opts.transitionMs);
     }
 
     /**

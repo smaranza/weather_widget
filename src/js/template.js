@@ -40,7 +40,7 @@ const TEMPLATE = {
                 let $fItem = $('<li class="forecast__day">')
                     .append(
                         $('<h5>').html(avDayData.day),
-                        $('<h5>').html(avDayData.dt_txt),
+                        // $('<h5>').html(avDayData.dt_txt),
                         this.iconEl(avDayData.weather.iconSrc),
                         $('<h5>').html(`${parseInt(avDayData.main.temp)}°`) // using main temp == min and max
                     );
