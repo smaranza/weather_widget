@@ -6,31 +6,41 @@ const TEMPLATE = {
                     <div class="city__temps"></div>
                 </div>`,
 
+    celsiusEl: `<span class="is__celsius">°</span>`,
+
     nameEl: (name) => $('<h2>', {
-        class: 'current__location header__3',
+        class: 'current__location h__3',
         html: name.toString()
     }),
 
-    currentEl: function (current) {
+    iconEl: (src) => $('<img>', {
+        class: 'weather__icon',
+        src: src
+    }),
+
+    currentEl: function (city) {
+        const cName = this.nameEl(city.name),
+              cIcon = this.iconEl(city.current.weather.iconSrc);
+
         const cDescription = $('<h5>', {
-            class: 'current__desc header__5',
-            html: current.weather.main.toString()
+            class: 'current__desc h__5',
+            html: city.current.weather.main.toString()
         })
         const cTemp = $('<h3>', {
-            class: 'current__temp header__2',
-            html: parseInt(current.main.temp) + "°"
+            class: 'current__temp h__2',
+            html: parseInt(city.current.main.temp) + this.celsiusEl
         })
         const cMinMax = $('<h5>', {
-            class: 'current__minmax header__5',
-            html: `${parseInt(current.main.temp_min)}° / ${parseInt(current.main.temp_max)}°`
+            class: 'current__minmax h__5',
+            html: `${parseInt(city.current.main.temp_min) + this.celsiusEl} / ${parseInt(city.current.main.temp_max)+ this.celsiusEl}`
         })
 
-        return $('<div class="city__current-inner">').append(cDescription, cTemp, cMinMax)
+        return $('<div class="city__current-inner">').append(cName, cDescription, cTemp, cIcon, cMinMax)
     },
 
     forecastList: function (forecast) {
         let $fList = $('<ul class="city__forecast-inner"></ul>');
-
+        
         for (const day in forecast) {
             if (Object.hasOwnProperty.call(forecast, day)) {
                 // use midday forecast as default forecast, otherwise take last entry (closest to midday)
@@ -40,7 +50,6 @@ const TEMPLATE = {
                 let $fItem = $('<li class="forecast__day">')
                     .append(
                         $('<h5>').html(avDayData.day),
-                        // $('<h5>').html(avDayData.dt_txt),
                         this.iconEl(avDayData.weather.iconSrc),
                         $('<h5>').html(`${parseInt(avDayData.main.temp)}°`) // using main temp == min and max
                     );
@@ -49,12 +58,7 @@ const TEMPLATE = {
             }
         }
         return $fList
-    },
-
-    iconEl: (src) => $('<img>', {
-        class: 'weather__icon',
-        src: src
-    })
+    }
 }
 
 export default TEMPLATE;

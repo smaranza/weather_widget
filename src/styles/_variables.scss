@@ -1,23 +1,15 @@
-@mixin neumorph {
-    // border-radius: 1.2rem;s
-    $background-color: #e0e0e0;
-    box-shadow: -20px -20px 60px #bebebe,
-                20px 20px 60px #ffffff;
-}
-
-
 /* --------- LAYOUT --------- */
 
 $breakpoint__mobile: 768px;
 $breakpoint__mobile-ex: $breakpoint__mobile - 1px;
 
-$gap: 1.2rem;
+$gap: 1.25rem;
 
 $gap__xs: calc($gap / 2); // 10px
 $gap__s:  $gap;           // 20px
 $gap__m:  $gap * 1.25;    // 25px
 $gap__l:  $gap * 2;       // 40px
-$gap__xl: $gap * 3.25;    // 65px
+$gap__xl: $gap * 3;    // 65px
 
 
 /* --------- TYPOGRAPHY --------- */
@@ -31,10 +23,32 @@ $f-size: 1rem; // 16px
 
 $f-size__xs:  $f-size * 0.875; // 14px 
 $f-size__s:   $f-size; 
-$f-size__m:   $f-size * 1.25; // 20px
-$f-size__l:   $f-size * 1.5; // 24px
-$f-size__xl:  $f-size * 2.125; // 34px
-$f-size__xxl: $f-size * 3.75; // 60px
+$f-size__m:   $f-size * 1.75; // 20px
+$f-size__l:   $f-size * 2.5; // 24px
+$f-size__xl:  $f-size * 3.15; // 34px
+$f-size__xxl: $f-size * 5; // 60px
+
+
+h1, h2,
+.h__1, .h__2 {
+    font-weight: $f-weight__regular;
+    font-size: $f-size__xxl;
+}
+
+h3,
+.h__3 {
+    font-weight: $f-weight__bold;
+    font-size: $f-size__m;
+}
+
+h4, h5, h6,
+.h__4, .h__5, .h__6 {
+    font-weight: $f-weight__regular;
+    font-size: $f-size__xs;
+    text-transform: uppercase;
+    letter-spacing: calc(.12 * $f-size__xs);
+}
+
 
 /* ----------- COLORS ----------- */
 
@@ -59,6 +73,7 @@ $colors: (
 // TIME 
 $t__base: 300ms;
 
+$t__min: calc($t__base / 10);
 $t__faster: calc($t__base / 3.33);
 $t__fast:   calc($t__base / 2.5);
 $t__base:   $t__base;
@@ -68,7 +83,6 @@ $t__slower: $t__base * 3;
 $t__bounce: cubic-bezier(.29,1.52,.65,.84);
 
 /* --------- PSEUDO --------- */
-
 @mixin pseudo($position: absolute) {
     content: '';
     width: 100%;
@@ -80,5 +94,19 @@ $t__bounce: cubic-bezier(.29,1.52,.65,.84);
     z-index: 30;
 }
 
+/* --------- DEFAULT --------- */
+
 $background-color: $dark;
 $font-color: $lighter;
+
+@mixin neumorph {
+    border-radius: $gap__l;
+    $background-color: $lighter;
+    box-shadow: calc(-1 * $gap) calc(-1 * $gap) $gap__xl $light,
+        $gap $gap $gap__xl $white;
+}
+
+
+.is__celsius {
+        // @extend h5;
+}

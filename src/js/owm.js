@@ -73,10 +73,14 @@ const OWMAPI = {
         const response = await this.makeApiCall("/data/2.5/forecast");
         let dailyForecast = [];
 
+        
+        console.log(response);
+
         // Sort list by time & date
         response.list.sort((a, b) => {
             return ((a.dt_txt < b.dt_txt) ? -1 : ((a.dt_txt > b.dt_txt) ? 1 : 0));
         });
+
         
         response.list.forEach(timestamp => {
             let date = new Date(timestamp.dt_txt);
@@ -101,6 +105,8 @@ const OWMAPI = {
                 dailyForecast.push(response.list.splice(i, 7));
             }
         }
+
+        console.log(dailyForecast);
 
         return dailyForecast
     },
@@ -139,8 +145,6 @@ const OWMAPI = {
        @param extraParams (object) extra query parameters
     */
     getCityWeather: async function (name) {
-        const client = this.client;
-
         let weather = await this.getCityCoords(name)
             .then(async (res) => {
                 return {

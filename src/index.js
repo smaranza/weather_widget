@@ -12,35 +12,10 @@ import '@/styles/index.scss'
 const weatherSlider = document.querySelector("#weather-slider");
 const citiesName = weatherSlider.dataset.cities.split(", ")
 
-let citiesData = [];
-
-// create axios instance with reusable options
-const PexelsClient =  axios.create({
-    baseURL: 'https://api.pexels.com/v1/',
-    headers: {
-        Authorization: process.env.PEXELS_KEY,
-    }
-});
-
-async function searchPexelImage(query) {
-    let response = await PexelsClient.get("search", {
-        params: {
-            query: query,
-            orientation: 'landscape',
-            per_page: 1
-        }
-    }).catch((error) => {
-        console.log(error);
-    })
-
-    return response.data.photos[0]
-}
-
 // FETCH WEATHER DATA
+let citiesData = [];
 for (const cityName of citiesName) {
-    let cityData = await OWM.getCityWeather(cityName);
-    cityData.background = await searchPexelImage(cityData.name);
-    citiesData.push(cityData);
+    citiesData.push(await fetchCityData(cityName));
 }
 
 $(function () {
@@ -70,9 +45,9 @@ $(function () {
 
             // append city current weather section
             $($cityCurrent).append([
-                $(TEMPLATE.nameEl(city.name)),
-                $(TEMPLATE.currentEl(city.current)),
-                $(TEMPLATE.iconEl(city.current.weather.iconSrc))
+                // $(TEMPLATE.nameEl(city)),
+                $(TEMPLATE.currentEl(city)),
+                // $(TEMPLATE.iconEl(city.current.weather.iconSrc))
             ]);
 
             // append city forecast weather section
@@ -85,15 +60,64 @@ $(function () {
     // INIT SLIDER
     const carousel = new SLIDER({
         infinite: true,
+        threshold: 10,
         slideCls: 'weather-city'
     });
+
+    // REGISTER EVENTS
+    $(window).one('click', getMotionPermission);
 });
 
+// UTILS
+async function fetchCityData(name) {
+    let city = await OWM.getCityWeather(name);
+    city.background = await searchPexelImage(city.name);
+    return city
+}
 
-// REGISTER EVENTS
+async function searchPexelImage(query) {
+    const rAmount = 5;
+    let response = await axios.get('https://api.pexels.com/v1/search', {
+        params: {
+            query: query,
+            orientation: 'landscape',
+            per_page: 5
+        },
+        headers: {
+            Authorization: process.env.PEXELS_KEY,
+        }
+    }).catch((error) => {
+        console.log(error);
+    })
 
+    let image = '';
+    if (response.status == 200) {
+        let rnd = Math.floor(Math.random() * rAmount);
+        image = response.data.photos[rnd]
+    }
 
-// EFFECTS ETC
+    return image
+}
 
+function getMotionPermission() {
+    if (typeof (DeviceMotionEvent) !== null && typeof (DeviceMotionEvent.requestPermission) === "function") {
+        DeviceMotionEvent.requestPermission()
+            .then(response => {
+                if (response == "granted") {
+                    window.addEventListener("devicemotion", handleMotionEvent)
+                }
+            })
+            .catch(console.error)
+    }
+}
 
-// $(app).text(JSON.stringify(citiesData))
+function handleMotionEvent(event) {
+    const k = 3,
+          x = event.acceleration.x,
+          y = event.acceleration.y;
+  
+    $('.slider__slide.is__active .city__bg').css({
+        transition: '30ms',
+        transform: `translate(${-x * k}px, ${-y * k}px)`
+    })
+}

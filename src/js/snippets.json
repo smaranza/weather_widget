@@ -1,12 +1,12 @@
 {
     "weekdays": {
-        "0": "sunday",
-        "1": "monday",
-        "2": "tuesday",
-        "3": "wednesday",
-        "4": "thursday",
-        "5": "friday",
-        "6": "saturday"
+        "0": "sun",
+        "1": "mon",
+        "2": "tue",
+        "3": "wed",
+        "4": "thu",
+        "5": "fri",
+        "6": "sat"
     },
     "banners": {
         "london": "https://images.pexels.com/photos/14296821/pexels-photo-14296821.jpeg",

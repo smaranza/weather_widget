@@ -32,6 +32,7 @@ class SLIDER {
         // standardize classes
         $slider.addClass('slider');
         $slides.addClass('slider__slide');
+        $($slides[this.opts.initialSlide]).addClass(this.opts.activeCls);
 
         // initialize track with slides
         this.$track = $('<div>', {
@@ -114,10 +115,7 @@ class SLIDER {
         });
 
         // resize
-        $(window).on('resize', () => {
-            this.slideWidth = $($(me.$slides)[0]).outerWidth();
-            me.handleSlide(0);
-        });
+        $(window).on('resize', me.onResize.bind(me));
     }
 
     /**
@@ -203,6 +201,15 @@ class SLIDER {
     }
 
     /**
+     * updates slider variables
+     */
+    onResize() {
+        this.threshold = window.innerWidth / 100 * this.opts.threshold;
+        this.slideWidth = $($(this.$slides)[0]).outerWidth();
+        this.handleSlide(0);
+    }
+
+    /**
      * Calculates target slide based on direction, calls slideTo(targetSlide)
      * @param (int) direction
      */
@@ -233,9 +240,8 @@ class SLIDER {
         // reset drag positions
         this.dragStart = this.dragEnd = this.dragDelta = 0;
 
-        // remove dragging class at transition end
-        // setTimeout(() => {
-        // }, this.opts.transitionMs);
+        $(this.$slides).removeClass(this.opts.activeCls);
+        $($(this.$slides)[Math.abs(slide)]).addClass(this.opts.activeCls);
     }
 
     /**

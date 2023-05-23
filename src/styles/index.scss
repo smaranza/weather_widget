@@ -1,7 +1,6 @@
 @import 'variables';
 @import 'slider';
 
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,11 +8,7 @@
 }
 
 html {
-  font-size: $f-size;
-  font-family: $f-family;
-  background: $background-color;
-  color: $font-color;
-  line-height: 1.4;
+  height: 100vh;
 }
 
 ul,
@@ -23,10 +18,13 @@ li {
 }
 
 body {
-  margin: 0;
-  padding: 0;
   text-align: center;
   width: 100%;
+  height: 100%;
+  background: $background-color;
+  color: $font-color;
+  font-size: $f-size;
+  font-family: $f-family;
 
   &.no__scroll {
     overflow: hidden;
@@ -34,20 +32,21 @@ body {
 
   main {
     width: 100%;
-    height: 100vh;
-    // padding: 1rem;
+    height: 100%;
+    // padding: $gap;
 
     #weather-slider {
-      // background-color: blue;
       height: 100%;
-      @include neumorph;
-      
-      
+      // @include neumorph;
+
       .weather-city {
         position: relative;
         padding: 3em;
 
-      
+        .city__current {
+
+        }
+
         .city__bg {
           width: 100%;
           height: 100%;
@@ -57,30 +56,29 @@ body {
           z-index: -1;
           background-size: cover;
           // filter: blur(2px);
-          filter: contrast(.8);
-          
+          filter: contrast(.8) blur(2px);
+          transition: 30ms;
+          will-change: transform;
+
           &::before {
             @include pseudo;
             // backdrop-filter: blur(8px);
             background-color: rgba(19, 51, 75, 0.638);
           }
         }
-        
+
         .city__forecast {
           &-inner {
             display: inline-flex;
-  
+
             .forecast__day {
-              // max-width: 20%;
               img {
                 width: 100%;
               }
-
             }
           }
         }
       }
-
     }
   }
 }
