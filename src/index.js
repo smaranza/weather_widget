@@ -3,7 +3,7 @@ import axios from "axios";
 import OWM from '@/js/owm'
 import TEMPLATE from '@/js/template'
 import SLIDER from '@/js/slider'
-import SNIPPETS from "@/js/snippets";
+import SNIPPETS from "@/assets/snippets";
 
 // Import of styles
 import '@/styles/index.scss'
@@ -11,6 +11,8 @@ import '@/styles/index.scss'
 // const citiesName = ["London", "Milan", "Bangkok", "Los Angeles", "Nairobi"];
 const weatherSlider = document.querySelector("#weather-slider");
 const citiesName = weatherSlider.dataset.cities.split(", ")
+const breakpoint = 768;
+const isMobile = () => window.innerWidth < breakpoint;
 
 // FETCH WEATHER DATA
 let citiesData = [];
@@ -31,7 +33,9 @@ $(function () {
             $($city).appendTo(app);
 
             // city background
-            let cityBG = city.background.src[window.innerWidth < 768 ? "portrait" : "landscape"];
+            let cityBG = (city.background.src)
+                ? city.background.src[ isMobile ? "portrait" : "landscape"]
+                : SNIPPETS.banners[city.name];
             
             $($city).append($('<div>', {
                 class: "city__bg",
@@ -42,18 +46,16 @@ $(function () {
 
             let $cityCurrent = $($city).find('.city__current');
             let $cityForecast = $($city).find('.city__forecast');
+            let $cityWaves = $($city).find('.city__waves');
 
             // append city current weather section
-            $($cityCurrent).append([
-                // $(TEMPLATE.nameEl(city)),
-                $(TEMPLATE.currentEl(city)),
-                // $(TEMPLATE.iconEl(city.current.weather.iconSrc))
-            ]);
+            $($cityCurrent).append([$(TEMPLATE.currentEl(city))]);
 
             // append city forecast weather section
-            $($cityForecast).append(
-                $(TEMPLATE.forecastList(city.forecast))
-            );
+            $($cityForecast).append($(TEMPLATE.forecastList(city.forecast)));
+            
+            // append city fake waves
+            $($cityWaves).append([$(TEMPLATE.wave01), $(TEMPLATE.wave02)]);
         }
     }
     
@@ -71,7 +73,7 @@ $(function () {
 // UTILS
 async function fetchCityData(name) {
     let city = await OWM.getCityWeather(name);
-    city.background = await searchPexelImage(city.name);
+    city.background = await searchPexelImage(city.name) || SNIPPETS.banners[name];
     return city
 }
 
@@ -87,11 +89,11 @@ async function searchPexelImage(query) {
             Authorization: process.env.PEXELS_KEY,
         }
     }).catch((error) => {
-        console.log(error);
+        console.warn(error);
     })
 
-    let image = '';
-    if (response.status == 200) {
+    let image;
+    if (response && response.status == 200) {
         let rnd = Math.floor(Math.random() * rAmount);
         image = response.data.photos[rnd]
     }
@@ -114,10 +116,18 @@ function getMotionPermission() {
 function handleMotionEvent(event) {
     const k = 3,
           x = event.acceleration.x,
-          y = event.acceleration.y;
+          y = event.acceleration.y,
+          b = event.rotationRate.beta;
   
     $('.slider__slide.is__active .city__bg').css({
-        transition: '30ms',
         transform: `translate(${-x * k}px, ${-y * k}px)`
+    })
+
+    $('.slider__slide.is__active .wave').each((i, wave) => {
+        let k = (i % 2 == 0) ? -b / 4 : b / 2;
+
+        $(wave).css({
+            transform: `translateX(${k}px)`
+        })
     })
 }

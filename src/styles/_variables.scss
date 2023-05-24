@@ -5,6 +5,7 @@ $breakpoint__mobile-ex: $breakpoint__mobile - 1px;
 
 $gap: 1.25rem;
 
+$gap__xxs: calc($gap / 4); // 5px
 $gap__xs: calc($gap / 2); // 10px
 $gap__s:  $gap;           // 20px
 $gap__m:  $gap * 1.25;    // 25px
@@ -14,7 +15,7 @@ $gap__xl: $gap * 3;    // 65px
 
 /* --------- TYPOGRAPHY --------- */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,700;1,400&display=swap');
-$f-family: 'DM Sans', sans-serif;
+$f-family: 'DM Sans', 'Inter', sans-serif;
 
 $f-weight__regular: 400;
 $f-weight__bold: 700;
@@ -44,11 +45,13 @@ h3,
 h4, h5, h6,
 .h__4, .h__5, .h__6 {
     font-weight: $f-weight__regular;
-    font-size: $f-size__xs;
+    font-size: $f-size__s;
+}
+
+h6, .h__6 {
     text-transform: uppercase;
     letter-spacing: calc(.12 * $f-size__xs);
 }
-
 
 /* ----------- COLORS ----------- */
 
@@ -57,7 +60,10 @@ $lighter: #e0e0e0;
 $light: #bebebe;
 $dark: #2d2d2d;
 $black: #000000;
-$teal: #13334b;
+$teal: #005799;
+$dark-teal: #13334b;
+$orange: #ffa704;
+$dark-orange: #dd6216;
 
 $colors: (
     "white": $white,
@@ -66,6 +72,9 @@ $colors: (
     "dark": $dark,
     "black": $black,
     "teal": $teal,
+    "dark-teal": $dark-teal,
+    "orange": $orange,
+    "dark-orange": $dark-orange,
 );
 
 /* --------- TRANSITION --------- */
@@ -74,7 +83,7 @@ $colors: (
 $t__base: 300ms;
 
 $t__min: calc($t__base / 10);
-$t__faster: calc($t__base / 3.33);
+$t__faster: calc($t__base / 5);
 $t__fast:   calc($t__base / 2.5);
 $t__base:   $t__base;
 $t__slow:   $t__base * 1.75;
@@ -99,14 +108,43 @@ $t__bounce: cubic-bezier(.29,1.52,.65,.84);
 $background-color: $dark;
 $font-color: $lighter;
 
-@mixin neumorph {
-    border-radius: $gap__l;
-    $background-color: $lighter;
-    box-shadow: calc(-1 * $gap) calc(-1 * $gap) $gap__xl $light,
-        $gap $gap $gap__xl $white;
+@mixin neumorph($direction: 'in') {
+    border-radius: $gap__m;
+    background-color: rgba($light, .1);
+    @include glass;
+    
+    @if $direction == 'in' {
+        box-shadow:
+            inset calc(-1 * $gap) calc(-1 * $gap) $gap__xl rgba($lighter, .2),
+            inset $gap $gap $gap__xl rgba($lighter, .2);
+    } @else {
+        box-shadow:
+            calc(-1 * $gap) calc(-1 * $gap) $gap__xl rgba($lighter, .3),
+            $gap $gap $gap__xl rgba($white, .3);
+    }
 }
 
+@mixin glass {
+    background-color: rgba($light, .1);
+
+    @supports (backdrop-filter: none) {
+      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px);
+    }
+}
 
 .is__celsius {
-        // @extend h5;
+    position: relative;
+    
+    &::after {
+        content: '°';
+        position: absolute;
+        top: 0;
+        z-index: 30;
+        font-size: .5em;
+        line-height: 1.2;
+        position: absolute;
+        font-weight: lighter;
+        font-size: .5em;
+    }
 }

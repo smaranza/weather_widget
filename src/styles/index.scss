@@ -8,7 +8,7 @@
 }
 
 html {
-  height: 100vh;
+  height: 100%;
 }
 
 ul,
@@ -33,41 +33,43 @@ body {
   main {
     width: 100%;
     height: 100%;
-    // padding: $gap;
 
     #weather-slider {
       height: 100%;
-      // @include neumorph;
 
       .weather-city {
         position: relative;
-        padding: 3em;
+        padding: $gap__l $gap__s $gap__s;
+        display: flex;
+        flex-flow: column;
 
-        .city__current {
-
+        > [class^='city__'] {
+          margin: $gap__s 0;
+          padding: $gap__s;
         }
 
-        .city__bg {
-          width: 100%;
-          height: 100%;
-          position: absolute;
-          left: 0;
-          top: 0;
-          z-index: -1;
-          background-size: cover;
-          // filter: blur(2px);
-          filter: contrast(.8) blur(2px);
-          transition: 30ms;
-          will-change: transform;
+        .city__current {
+          max-height: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 100;
 
-          &::before {
-            @include pseudo;
-            // backdrop-filter: blur(8px);
-            background-color: rgba(19, 51, 75, 0.638);
+          .city__current-inner {
+            display: flex;
+            flex-flow: column;
+
+            .current__temp {
+              font-size: calc($f-size__xxl * 2);
+              line-height: 1;
+            }
           }
         }
 
         .city__forecast {
+          @include neumorph;
+          z-index: 100;
+
           &-inner {
             display: inline-flex;
 
@@ -78,7 +80,108 @@ body {
             }
           }
         }
+
+        .city__bg {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          position: absolute;
+          left: 0;
+          top: 0;
+          z-index: -1;
+          background-size: cover;
+          filter: blur(2px) contrast(.8);
+          transition: $t__min;
+          will-change: transform;
+          
+          @supports (backdrop-filter: none) {
+            filter: contrast(.8);
+          }
+
+          &::before {
+            @include pseudo;
+            background-color: rgba($dark-teal, .6);
+          }
+        }
+
+        .city__waves {
+          flex-grow: 1;
+          max-height: 50%;
+          border-left: 2px solid;
+          border-bottom: 2px solid;
+          margin-bottom: 0;
+          padding-top: 0;
+          z-index: 0;
+
+          &::before {
+            content: 'C°';
+            border-top: 1px solid $lighter;
+            position: absolute;
+            padding: $gap__xxs 0 0 $gap__xs;
+            left: $gap;
+          }
+
+          &::after {
+            content: 'h';
+            border-right: 1px solid $lighter;
+            position: absolute;
+            padding: 0 $gap__xs $gap__xs 0;
+            right: $gap;
+            bottom: $gap;
+          }
+
+          .wave {
+            position: absolute;
+            width: 200%;
+            max-height: 100%;
+            left: -50%;
+            bottom: 0;
+            color: $lighter;
+            opacity: .5;
+            transition: transform $t__base;
+            
+            @media (min-width: $breakpoint__mobile) {
+              left: 0;
+              max-height: unset;
+              animation: waves $t__slower * 15 infinite alternate-reverse linear;
+            }
+
+            &:first-child {
+              animation-duration: $t__slower * 10;
+            }
+          }
+        }
+
+        &:nth-child(even){
+          .city__waves .wave {
+            opacity: .3;
+            color: $dark-orange;
+
+            &:first-child {
+              color: $orange;
+            }
+          }
+        }
+        
+        &:nth-child(odd) { 
+          .city__waves .wave {
+            color: $dark-teal;
+            z-index: 40;
+            mix-blend-mode: normal;
+  
+            animation-direction: alternate;
+
+            &:first-child {
+              color: $teal;
+            }
+          }
+        }
       }
     }
   }
+}
+
+@keyframes waves {
+  from {transform: translateX(0%); }
+  to {transform: translateX(-50%); }
 }

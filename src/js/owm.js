@@ -1,5 +1,5 @@
 import axios from "axios";
-import SNIPPETS from "@/js/snippets";
+import SNIPPETS from "@/assets/snippets";
 
 /*
     Open Weather Map API (OWM)
@@ -34,7 +34,7 @@ const OWMAPI = {
                 limit: 3
             }
         }).catch((error) => {
-            console.log(error);
+            console.warn(error);
         })
 
         // populate this coordinates
@@ -73,40 +73,32 @@ const OWMAPI = {
         const response = await this.makeApiCall("/data/2.5/forecast");
         let dailyForecast = [];
 
-        
-        console.log(response);
-
-        // Sort list by time & date
         response.list.sort((a, b) => {
             return ((a.dt_txt < b.dt_txt) ? -1 : ((a.dt_txt > b.dt_txt) ? 1 : 0));
         });
 
-        
+        let ct= 0;
         response.list.forEach(timestamp => {
+            ct++
             let date = new Date(timestamp.dt_txt);
             timestamp.date = date.toDateString();
             timestamp.day = SNIPPETS.weekdays[date.getDay()];
             timestamp.time = date.getHours();
             timestamp.weather = timestamp['weather'][0];
             timestamp.weather.iconSrc = this.getIconByWeather(timestamp.weather.icon);
-
+            
+            // skip today's forecast
+            let today = new Date(Date.now()).toDateString();
+            if (today == date) {
+                response.list.pop(timestamp)
+            }
         });
         
         // slice forecast list into days
         for (let i = 0; i < response.list.length; i++) {
-            let ts = response.list[i];
-            
-            // skip today's forecast
-            let today = new Date(Date.now()).toDateString();
-            if (today == ts.date) {
-                response.list.pop(ts)
-            } else {
-                // 40 timestamps (8 * 5 days = every 3h )
-                dailyForecast.push(response.list.splice(i, 7));
-            }
+            // 40 timestamps (8 * 5 days = every 3h )
+            dailyForecast.push(response.list.splice(i, 7));
         }
-
-        console.log(dailyForecast);
 
         return dailyForecast
     },
@@ -130,7 +122,7 @@ const OWMAPI = {
         const response = await this.client.get(call, {
             params: params
         }).catch((error) => {
-            console.log(error);
+            console.warn(error);
         })
 
         return response.data
@@ -156,7 +148,7 @@ const OWMAPI = {
                         lon: res.lon
                     },
                     current: await this.fetchCurrent(),
-                    forecast: await this.fetchForecast(),
+                    forecast: await this.fetchForecast()
                 }
             });
 

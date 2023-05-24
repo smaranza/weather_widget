@@ -5,26 +5,28 @@
         position: relative;
         overflow: hidden;
         width: 100%;
+        color: $light;
     
         .slider__track {
             position: relative;
             display: flex;
             flex-flow: row;
-            transition: transform 300ms ease;
+            transition: transform $t__base ease;
             height: 100%;
             width: max-content;
             cursor: grab;
     
             &.is__dragging {
                 cursor: grabbing;
-                transition-duration: 60ms;
+                transition-duration: $t__faster;
             }
             
             .slider__slide {
-                width: 100vw;
+                width: 100vw; // @NEXT implement dynamic slidewidth
                 display: block;
                 position: relative;
                 flex-shrink: 0;
+                overflow: hidden;
             }
         }
         
@@ -41,8 +43,8 @@
                 
                 .dot__item {
                     cursor: pointer;
-                    padding: 1rem .25rem;
-                    transition: background-color 120ms;
+                    padding: $gap $gap__xxs;
+                    transition: background-color $t__fast;
                     
                     &::after {
                         @include pseudo('relative');
@@ -51,12 +53,13 @@
                         aspect-ratio: 1 / 1;
                         border-radius: 50%;
                         background-color: transparent;
-                        border: 1px solid white;
+                        border: 1px solid $lighter;
+                        @include neumorph('out');
                     }
                     
                     &.is__active {
                         &::after {
-                            background-color: white;
+                            background-color: $lighter;
                         }
                     }
                 }
@@ -74,13 +77,13 @@
                 .prev {
                     cursor: pointer;
                     position: absolute;
-                    height: calc(100% - 12px);
+                    height: 100%;
                     margin-top: 6px;
-                    width: 80px;
+                    width: 10%;
                     top: 0;
                     left: 0;
-                    transition: 120ms ease;
-                    box-shadow: inset -20px 0 8px 12px $light;
+                    transition: $t__fast ease;
+                    box-shadow: inset calc(-1 * $gap) 0 $gap__xxs $gap__xs $light;
                     transition-property: background-color;
                     mix-blend-mode: overlay;
     
@@ -102,6 +105,12 @@
                         box-shadow: inset -12px 0 8px 6px #e0e0e0;
                     }
                 }
+            }
+        }
+
+        .slider__pagination + .slider__track {
+            .slider__slide > :first-child {
+                margin-top: $gap__xl;
             }
         }
     }
