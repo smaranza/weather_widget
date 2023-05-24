@@ -1,3 +1,4 @@
+import SNIPPETS from "@/assets/snippets";
 
 const TEMPLATE = {
     baseCityEl: `<div class="weather-city">
@@ -39,21 +40,26 @@ const TEMPLATE = {
         let $fList = $('<ul class="city__forecast-inner"></ul>');
         
         for (const day in forecast) {
-            if (Object.hasOwnProperty.call(forecast, day)) {
-                // use midday forecast as default forecast, otherwise take last entry (closest to midday)
-                let avDayData = (forecast[day][4]) ? forecast[day][4] : forecast[day][day.length - 1];
+            // use midday forecast as default forecast in mobile, otherwise take last entry (closest to midday)
+            let $fItem = $('<li class="forecast__day">');
 
-                // build forecast item for next days
-                let $fItem = $('<li class="forecast__day">')
-                    .append(
-                        $('<h6>').html(avDayData.day),
-                        this.iconEl(avDayData.weather.iconSrc),
-                        $('<h5>').html(`${parseInt(avDayData.main.temp)}°`) // using main temp == min and max
-                    );
+            // @NEXT implementdorpdown for hours in mobile
+            let avDayData = (forecast[day][4]) ? forecast[day][4] : forecast[day][day.length - 1];
 
-                $($fList).append($fItem);
-            }
+            // build forecast item for next days
+            // using main temp == min and max
+            $fItem.append(
+                $('<h6>').html(avDayData.day),
+                this.iconEl(avDayData.weather.iconSrc),
+                $('<h5>').html(`<span>Temp</span><br>${parseInt(avDayData.main.temp)}°`),
+                $('<h5>').html(`<span>Rain</span><br>${parseInt(avDayData.pop) * 100}%`),
+                $('<h5>').html(`<span>Wind speed</span><br>${parseInt(avDayData.wind.speed)}km/h`),
+                $('<h5>').html(`<span>Cloud Coverage</span><br>${parseInt(avDayData.clouds.all)}%`) 
+            );
+
+            $($fList).append($fItem);
         }
+
         return $fList
     },
 

@@ -43,21 +43,39 @@ body {
         display: flex;
         flex-flow: column;
 
+        @media (min-width: $breakpoint__mobile) {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          padding-right: $gap__xl;
+        }
+
         > [class^='city__'] {
           margin: $gap__s 0;
           padding: $gap__s;
+          
+          @media (min-width: $breakpoint__mobile) {
+            margin: $gap__l 0;
+            padding: $gap__l;
+          }
         }
 
         .city__current {
-          max-height: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           z-index: 100;
+          
+          @media (max-width: $breakpoint__mobile-ex) and (min-height: $breakpoint__mobile-v) {
+            max-height: 50%;
+          }
 
           .city__current-inner {
             display: flex;
             flex-flow: column;
+
+            .current__location {
+              margin-bottom: $gap__xs;
+            }
 
             .current__temp {
               font-size: calc($f-size__xxl * 2);
@@ -71,11 +89,56 @@ body {
           z-index: 100;
 
           &-inner {
-            display: inline-flex;
+            display: flex;
+            flex-flow: row;
 
+            @media (min-width: $breakpoint__mobile) {
+              flex-flow: column;
+            }
+            
             .forecast__day {
+              display: flex;
+              flex-flow: column;
+
+              @media (min-width: $breakpoint__mobile) {
+                flex-flow: row;
+                justify-content: space-between;
+                justify-content: space-between;
+                align-items: center;
+                text-align: left;
+              }
+
+              @media (max-width: $breakpoint__mobile-ex) {
+                > h5:nth-child(n+4),
+                h5 span, br {
+                  display: none;
+                  margin: 0;
+                }
+              }
+
+              h6 {
+                display: block;
+                z-index: 50;
+                @media (min-width: $breakpoint__mobile) {
+                  text-align: right;
+                }
+              }
+
+              h5 {
+                @media (min-width: $breakpoint__mobile) {
+                  span {
+                    font-weight: $f-weight__bold;
+                    margin-bottom: 8px;
+                  }
+                }
+              }
+              
               img {
                 width: 100%;
+
+                @media (min-width: $breakpoint__mobile) {
+                  max-width: 20%;
+                }
               }
             }
           }
@@ -113,21 +176,45 @@ body {
           padding-top: 0;
           z-index: 0;
 
+          @media (min-width: $breakpoint__mobile) {
+            position: absolute;
+            bottom: 0;
+            width: calc(100% - ($gap__m * 2));
+            height: 100%;
+            margin: $gap__m;
+          }
+
+          &::before,
+          &::after {
+            position: absolute;
+
+            @media (min-width: $breakpoint__mobile) {
+              margin: 0;
+            }
+          }
+
           &::before {
             content: 'C°';
             border-top: 1px solid $lighter;
-            position: absolute;
             padding: $gap__xxs 0 0 $gap__xs;
             left: $gap;
+
+            @media (min-width: $breakpoint__mobile) {
+              left: 0;
+            }
           }
 
           &::after {
             content: 'h';
             border-right: 1px solid $lighter;
-            position: absolute;
             padding: 0 $gap__xs $gap__xs 0;
             right: $gap;
             bottom: $gap;
+
+            @media (min-width: $breakpoint__mobile) {
+              right: 0;
+              bottom: 0;
+            }
           }
 
           .wave {
@@ -142,6 +229,7 @@ body {
             
             @media (min-width: $breakpoint__mobile) {
               left: 0;
+              bottom: calc(-1 * $gap__l - 2px);
               max-height: unset;
               animation: waves $t__slower * 15 infinite alternate-reverse linear;
             }

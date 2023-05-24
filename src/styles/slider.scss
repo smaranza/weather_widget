@@ -80,30 +80,22 @@
                     height: 100%;
                     margin-top: 6px;
                     width: 10%;
+                    z-index: 300;
                     top: 0;
                     left: 0;
                     transition: $t__fast ease;
-                    box-shadow: inset calc(-1 * $gap) 0 $gap__xxs $gap__xs $light;
                     transition-property: background-color;
                     mix-blend-mode: overlay;
-    
-                    transition-property: background-color;
-                    mix-blend-mode: darken;
+                    filter: blur(32px);
     
                     &:hover {
-                        background: linear-gradient(-90deg, rgba(#bebebe, 0) 0%, rgba(#bebebe, .7 ) 100%);
-                        box-shadow: inset 12px 0 8px 6px #e0e0e0;
+                        background-color: rgba($light, .7 );
                     }
                 }
                 
                 .next {
                     left: unset;
                     right: 0;
-    
-                    &:hover {
-                        background: linear-gradient(90deg, rgba(#bebebe, 0) 0%, rgba(#bebebe, .7 ) 100%);
-                        box-shadow: inset -12px 0 8px 6px #e0e0e0;
-                    }
                 }
             }
         }
@@ -116,4 +108,4 @@
     }
 }
 
-@include slider(#e0e0e0, #bebebe, #2d2d2d);
+@include slider($lighter, $light, $dark);

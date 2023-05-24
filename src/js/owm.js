@@ -76,10 +76,8 @@ const OWMAPI = {
         response.list.sort((a, b) => {
             return ((a.dt_txt < b.dt_txt) ? -1 : ((a.dt_txt > b.dt_txt) ? 1 : 0));
         });
-
-        let ct= 0;
+        
         response.list.forEach(timestamp => {
-            ct++
             let date = new Date(timestamp.dt_txt);
             timestamp.date = date.toDateString();
             timestamp.day = SNIPPETS.weekdays[date.getDay()];
