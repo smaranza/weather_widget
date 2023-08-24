@@ -15,8 +15,9 @@ $gap__xl: $gap * 3;    // 65px
 
 
 /* --------- TYPOGRAPHY --------- */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,700;1,400&display=swap');
-$f-family: 'DM Sans', 'Inter', sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono&family=DM+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+$f-family__sans: 'DM Sans', 'Inter', sans-serif;
+$f-family__mono: 'DM Mono', 'DM Sans', 'Inter', sans-serif;
 
 $f-weight__regular: 400;
 $f-weight__bold: 700;

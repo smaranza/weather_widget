@@ -79,7 +79,12 @@ const OWMAPI = {
         
         response.list.forEach(timestamp => {
             let date = new Date(timestamp.dt_txt);
-            timestamp.date = date.toDateString();
+            timestamp.date = date.toLocaleDateString(undefined, {
+                weekday: 'short', 
+                month: "short", 
+                year: "numeric",
+                day: "2-digit"
+            }).replace(date.getFullYear(),'');
             timestamp.day = SNIPPETS.weekdays[date.getDay()];
             timestamp.time = date.getHours();
             timestamp.weather = timestamp['weather'][0];

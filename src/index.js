@@ -34,7 +34,7 @@ $(function () {
 
             // city background
             let cityBG = (city.background.src)
-                ? city.background.src[ isMobile ? "portrait" : "landscape"]
+                ? city.background.src[ isMobile() ? "portrait" : "landscape"]
                 : SNIPPETS.banners[city.name];
             
             $($city).append($('<div>', {
@@ -65,6 +65,8 @@ $(function () {
         threshold: 10,
         slideCls: 'weather-city'
     });
+
+    $('#loader').fadeOut();
 
     // REGISTER EVENTS
     $(window).one('click', getMotionPermission);

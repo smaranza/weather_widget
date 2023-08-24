@@ -62,6 +62,10 @@
                             background-color: $lighter;
                         }
                     }
+
+                    @media (min-width: $breakpoint__mobile) {
+                        padding: $gap__xs $gap__xxs;
+                    }
                 }
             }
         }

@@ -24,7 +24,8 @@ body {
   background: $background-color;
   color: $font-color;
   font-size: $f-size;
-  font-family: $f-family;
+  font-family: $f-family__sans;
+  position: relative;
 
   &.no__scroll {
     overflow: hidden;
@@ -42,11 +43,10 @@ body {
         padding: $gap__l $gap__s $gap__s;
         display: flex;
         flex-flow: column;
-
+        justify-content: space-around;
+        
         @media (min-width: $breakpoint__mobile) {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          padding-right: $gap__xl;
+          flex-flow: row;
         }
 
         > [class^='city__'] {
@@ -54,7 +54,7 @@ body {
           padding: $gap__s;
           
           @media (min-width: $breakpoint__mobile) {
-            margin: $gap__l 0;
+            margin: 0;
             padding: $gap__l;
           }
         }
@@ -64,6 +64,7 @@ body {
           align-items: center;
           justify-content: center;
           z-index: 100;
+          min-width: 35%;
           
           @media (max-width: $breakpoint__mobile-ex) and (min-height: $breakpoint__mobile-v) {
             max-height: 50%;
@@ -81,6 +82,11 @@ body {
               font-size: calc($f-size__xxl * 2);
               line-height: 1;
             }
+            
+            .current__desc,
+            .current__minmax {
+              font-family: $f-family__mono;
+            }
           }
         }
 
@@ -88,56 +94,92 @@ body {
           @include neumorph;
           z-index: 100;
 
-          &-inner {
+          .city__forecast-inner {
             display: flex;
             flex-flow: row;
 
             @media (min-width: $breakpoint__mobile) {
               flex-flow: column;
+              height: 100%;
             }
             
             .forecast__day {
               display: flex;
               flex-flow: column;
+              align-items: center;
 
               @media (min-width: $breakpoint__mobile) {
-                flex-flow: row;
+                flex-flow: row wrap;
+                flex-grow: 1;
                 justify-content: space-between;
-                justify-content: space-between;
-                align-items: center;
                 text-align: left;
-              }
-
-              @media (max-width: $breakpoint__mobile-ex) {
-                > h5:nth-child(n+4),
-                h5 span, br {
-                  display: none;
-                  margin: 0;
+                
+                &:not(:last-child) {
+                  border-bottom: 1px solid rgba(190, 190, 190, 0.5);
+                  margin-bottom: 1em;
+                  // padding-bottom: 1em;
                 }
               }
 
               h6 {
                 display: block;
                 z-index: 50;
-                @media (min-width: $breakpoint__mobile) {
-                  text-align: right;
-                }
-              }
+                font-family: $f-family__mono;
 
-              h5 {
                 @media (min-width: $breakpoint__mobile) {
-                  span {
-                    font-weight: $f-weight__bold;
-                    margin-bottom: 8px;
-                  }
+                  width: 100%;
                 }
               }
               
               img {
-                width: 100%;
+                max-width: 20%;
+                
+                @media (max-width: $breakpoint__mobile-ex) {
+                  width: 100%;
+                  max-width: unset;
+                  min-height: 62px;
+                }
+              }
 
-                @media (min-width: $breakpoint__mobile) {
-                  max-width: 20%;
+              .forecast__extra {
+                display: flex;
+                flex-flow: row wrap;
+                align-items: center;
+                width: 50%;
+                
+                @media (max-width: $breakpoint__mobile-ex) {
+                  border-top: 1px solid $light;
+                  margin-top: 1rem;
+                  flex-flow: column;
+                  height: 100%;
+                  width: 100%;
+                }
+                
+                h5 {
+                  font-family: $f-family__mono;
+                  font-size: .8rem;
+                  padding: .5rem 0;
+
+                  @media (min-width: $breakpoint__mobile) {
+                    width: 50%;
+                    line-height: 1.5;
+                  }
+
+                  &:last-of-type {
+                    @media (max-width: $breakpoint__mobile-ex) {
+                      margin-top: auto;
+                    }
+                  }
+
+                  span {
+                    font-family: $f-family__sans;
+                    font-weight: $f-weight__bold;
+                    display: inline-block;
+                    
+                    @media (max-width: $breakpoint__mobile-ex) {
+                      width: 100%;
+                    }
+                  }
                 }
               }
             }
@@ -170,11 +212,16 @@ body {
         .city__waves {
           flex-grow: 1;
           max-height: 50%;
-          border-left: 2px solid;
-          border-bottom: 2px solid;
+          // border-left: 2px solid;
+          // border-bottom: 2px solid;
           margin-bottom: 0;
           padding-top: 0;
           z-index: 0;
+          opacity: .5;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          bottom: 0;
 
           @media (min-width: $breakpoint__mobile) {
             position: absolute;
@@ -193,29 +240,29 @@ body {
             }
           }
 
-          &::before {
-            content: 'C°';
-            border-top: 1px solid $lighter;
-            padding: $gap__xxs 0 0 $gap__xs;
-            left: $gap;
+          // &::before {
+          //   content: 'C°';
+          //   border-top: 1px solid $lighter;
+          //   padding: $gap__xxs 0 0 $gap__xs;
+          //   left: $gap;
 
-            @media (min-width: $breakpoint__mobile) {
-              left: 0;
-            }
-          }
+          //   @media (min-width: $breakpoint__mobile) {
+          //     left: 0;
+          //   }
+          // }
 
-          &::after {
-            content: 'h';
-            border-right: 1px solid $lighter;
-            padding: 0 $gap__xs $gap__xs 0;
-            right: $gap;
-            bottom: $gap;
+          // &::after {
+          //   content: 'h';
+          //   border-right: 1px solid $lighter;
+          //   padding: 0 $gap__xs $gap__xs 0;
+          //   right: $gap;
+          //   bottom: $gap;
 
-            @media (min-width: $breakpoint__mobile) {
-              right: 0;
-              bottom: 0;
-            }
-          }
+          //   @media (min-width: $breakpoint__mobile) {
+          //     right: 0;
+          //     bottom: 0;
+          //   }
+          // }
 
           .wave {
             position: absolute;
@@ -224,25 +271,26 @@ body {
             left: -50%;
             bottom: 0;
             color: $lighter;
-            opacity: .5;
+            opacity: .3;
             transition: transform $t__base;
             
             @media (min-width: $breakpoint__mobile) {
               left: 0;
               bottom: calc(-1 * $gap__l - 2px);
               max-height: unset;
-              animation: waves $t__slower * 15 infinite alternate-reverse linear;
+              animation: waves $t__slower * 30 infinite alternate linear;
+              filter: blur(8px);
             }
 
             &:first-child {
-              animation-duration: $t__slower * 10;
+              animation-duration: $t__slower * 80;
+              filter: blur(2px);
             }
           }
         }
 
         &:nth-child(even){
           .city__waves .wave {
-            opacity: .3;
             color: $dark-orange;
 
             &:first-child {
@@ -256,7 +304,6 @@ body {
             color: $dark-teal;
             z-index: 40;
             mix-blend-mode: normal;
-  
             animation-direction: alternate;
 
             &:first-child {
@@ -267,6 +314,25 @@ body {
       }
     }
   }
+
+  #loader {
+    position: absolute;
+    border: 12px solid $teal; 
+    border-top-color: $dark-teal;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-.5, -.5);
+    z-index: 3000;
+    animation: spin 2000ms linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%) rotate(0deg); }
+  100% { transform: translate(-50%) rotate(360deg); }
 }
 
 @keyframes waves {
