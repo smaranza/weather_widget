@@ -45,8 +45,6 @@ const TEMPLATE = {
             
             // @NEXT implement dropdown for hours in mobile
             let avDayData = (forecast[day][4]) ? forecast[day][4] : forecast[day][day.length - 1];
-            console.log(avDayData.wind);
-            // debugger;
 
             // build forecast item for next days
             // using main temp == min and max
@@ -73,15 +71,13 @@ const TEMPLATE = {
     wave02: '<svg id="wave-1" class="wave" viewBox="0 0 900 600" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><path d="M0 551L12.5 543.8C25 536.7 50 522.3 75 523.8C100 525.3 125 542.7 150 515.5C175 488.3 200 416.7 225 399.8C250 383 275 421 300 441.7C325 462.3 350 465.7 375 457.2C400 448.7 425 428.3 450 429.5C475 430.7 500 453.3 525 477.5C550 501.7 575 527.3 600 531.8C625 536.3 650 519.7 675 499.2C700 478.7 725 454.3 750 434.3C775 414.3 800 398.7 825 392.8C850 387 875 391 887.5 393L900 395L900 601L887.5 601C875 601 850 601 825 601C800 601 775 601 750 601C725 601 700 601 675 601C650 601 625 601 600 601C575 601 550 601 525 601C500 601 475 601 450 601C425 601 400 601 375 601C350 601 325 601 300 601C275 601 250 601 225 601C200 601 175 601 150 601C125 601 100 601 75 601C50 601 25 601 12.5 601L0 601Z" fill="currentColor" stroke-linecap="round" stroke-linejoin="miter"></path></svg>',
 
     getWind: (wind) => {
-        console.log(wind);
-
         let speed = parseInt(wind.speed);
         let deg = wind.deg;
 
         let dir = "";
 
         if ( !(speed > 0) || typeof deg !== 'number' || isNaN(wind.deg)) {
-            return `${speed} km/h <br/>`;
+            return `${speed} km/h <br/> -`;
         }
     
         // keep within the range: 0 <= deg < 360
@@ -111,7 +107,7 @@ const TEMPLATE = {
         if ((236.25 <= deg && deg < 258.75) || (303.75 <= deg && deg < 326.25)) // WW
             dir += "W"
 
-        return `${speed} km/h ${dir}`;
+        return `${speed} <small>km/h</small><br/> ${dir}`;
     }
 }
 

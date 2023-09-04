@@ -17,6 +17,19 @@ li {
   list-style: none;
 }
 
+::-webkit-scrollbar {
+  width: $gap__xxs;
+
+  &-track {
+    border-radius: calc($gap__xxs / 2);
+    background-color: rgba($light, .3);
+  }
+  &-thumb {
+    border-radius: calc($gap__xxs / 2);
+    background-color: $light;
+  }
+}
+
 body {
   text-align: center;
   width: 100%;
@@ -50,11 +63,10 @@ body {
         }
 
         > [class^='city__'] {
-          margin: $gap__s 0;
           padding: $gap__s;
+          margin: 0;
           
           @media (min-width: $breakpoint__mobile) {
-            margin: 0;
             padding: $gap__l;
           }
         }
@@ -93,12 +105,21 @@ body {
         .city__forecast {
           @include neumorph;
           z-index: 100;
+          
+          @media (min-width: $breakpoint__mobile) {
+            padding: $gap__m;
+            padding-right: $gap__s;
+          }
 
           .city__forecast-inner {
             display: flex;
             flex-flow: row;
-
+            overflow-y: auto;
+            height: 100%;
+            position: relative;
+            
             @media (min-width: $breakpoint__mobile) {
+              padding-right: $gap__s;
               flex-flow: column;
               height: 100%;
             }
@@ -115,9 +136,15 @@ body {
                 text-align: left;
                 
                 &:not(:last-child) {
-                  border-bottom: 1px solid rgba(190, 190, 190, 0.5);
+                  border-bottom: 1px solid rgba($light, .3);
                   margin-bottom: 1em;
-                  // padding-bottom: 1em;
+                }
+              }
+
+              @media (max-width: $breakpoint__mobile-ex) {
+                &:nth-child(1) .forecast__extra h5 span {
+                  text-align: left;
+                  visibility: visible;
                 }
               }
 
@@ -132,12 +159,13 @@ body {
               }
               
               img {
-                max-width: 20%;
+                width: 20%;
+                max-width: 80px;
                 
                 @media (max-width: $breakpoint__mobile-ex) {
                   width: 100%;
+                  // height: 100%;
                   max-width: unset;
-                  min-height: 62px;
                 }
               }
 
@@ -151,18 +179,33 @@ body {
                   border-top: 1px solid $light;
                   margin-top: 1rem;
                   flex-flow: column;
-                  height: 100%;
                   width: 100%;
+                  height: 100%;
+                  // max-height: 75%;
+                  // position: absolute;
+                }
+
+                &.is__active {
+                  display: flex;
+                  flex-flow: row;
                 }
                 
                 h5 {
+                  width: 100%;
                   font-family: $f-family__mono;
                   font-size: .8rem;
                   padding: .5rem 0;
+                  border-bottom: 1px solid rgba($light, .3);
 
                   @media (min-width: $breakpoint__mobile) {
                     width: 50%;
                     line-height: 1.5;
+                    padding-top: 0;
+                    border: none;
+
+                    br {
+                      display: none;
+                    }
                   }
 
                   &:last-of-type {
@@ -178,6 +221,8 @@ body {
                     
                     @media (max-width: $breakpoint__mobile-ex) {
                       width: 100%;
+                      visibility: hidden;
+                      margin-bottom: $gap__xxs;
                     }
                   }
                 }
@@ -317,7 +362,7 @@ body {
 
   #loader {
     position: absolute;
-    border: 12px solid $teal; 
+    border: 5px solid $teal; 
     border-top-color: $dark-teal;
     border-radius: 50%;
     width: 60px;
