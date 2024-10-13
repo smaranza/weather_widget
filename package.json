@@ -19,7 +19,7 @@
     "webpack-dev-server": "^4.11.1"
   },
   "dependencies": {
-    "axios": "^1.4.0",
+    "axios": "^1.7.4",
     "jquery": "^3.7.0",
     "sass": "^1.62.1"
   }
